@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pricelist — Portfolio Design</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #0B2FFF;
+    --blue-dark: #0820CC;
+    --blue-mid: #2B4FFF;
+    --blue-light: #E8EDFF;
+    --yellow: #FFD600;
+    --yellow-dark: #F0C700;
+    --yellow-soft: #FFF8CC;
+    --ink: #0A0D1A;
+    --ink-2: #1E2340;
+    --white: #FFFFFF;
+    --gray: #F2F3FA;
+    --gray-2: #C8CBDE;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: #F4F5FC;
+    color: var(--ink);
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--ink);
+    position: relative;
+    overflow: hidden;
+    padding: 64px 40px 80px;
+    text-align: center;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    width: 520px; height: 520px;
+    border-radius: 50%;
+    background: var(--blue);
+    top: -180px; left: -120px;
+    opacity: .35;
+    filter: blur(60px);
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    width: 380px; height: 380px;
+    border-radius: 50%;
+    background: var(--yellow);
+    bottom: -140px; right: -100px;
+    opacity: .25;
+    filter: blur(50px);
+  }
+
+  /* abstract shapes */
+  .shape-tri {
+    position: absolute;
+    width: 0; height: 0;
+    border-left: 50px solid transparent;
+    border-right: 50px solid transparent;
+    border-bottom: 86px solid var(--blue);
+    top: 30px; right: 120px;
+    opacity: .5;
+    animation: spin 14s linear infinite;
+  }
+  .shape-sq {
+    position: absolute;
+    width: 42px; height: 42px;
+    background: var(--yellow);
+    bottom: 40px; left: 60px;
+    opacity: .6;
+    transform: rotate(22deg);
+    animation: wobble 6s ease-in-out infinite;
+  }
+  .shape-circle {
+    position: absolute;
+    width: 26px; height: 26px;
+    border: 4px solid var(--blue);
+    border-radius: 50%;
+    top: 60px; left: 180px;
+    opacity: .55;
+    animation: pulse 4s ease-in-out infinite;
+  }
+  .shape-dot {
+    position: absolute;
+    width: 12px; height: 12px;
+    background: var(--yellow);
+    border-radius: 50%;
+    top: 110px; right: 200px;
+    opacity: .7;
+    animation: pulse 3s ease-in-out infinite 1s;
+  }
+  .shape-cross {
+    position: absolute;
+    bottom: 60px; right: 80px;
+    width: 36px; height: 36px;
+    opacity: .45;
+  }
+  .shape-cross::before, .shape-cross::after {
+    content: ''; position: absolute;
+    background: var(--blue-mid);
+    border-radius: 4px;
+  }
+  .shape-cross::before { width: 100%; height: 8px; top: 50%; transform: translateY(-50%); }
+  .shape-cross::after  { width: 8px; height: 100%; left: 50%; transform: translateX(-50%); }
+
+  @keyframes spin    { to { transform: rotate(360deg); } }
+  @keyframes wobble  { 0%,100% { transform: rotate(22deg); } 50% { transform: rotate(45deg) scale(1.1); } }
+  @keyframes pulse   { 0%,100% { transform: scale(1); opacity: .55; } 50% { transform: scale(1.3); opacity: .9; } }
+  @keyframes fadeUp  { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
+
+  .badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--blue);
+    color: var(--yellow);
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase;
+    padding: 6px 18px; border-radius: 100px;
+    margin-bottom: 22px;
+    position: relative; z-index: 2;
+    animation: fadeUp .6s ease both;
+  }
+
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(2.4rem, 6vw, 4.2rem);
+    line-height: 1.08;
+    color: var(--white);
+    position: relative; z-index: 2;
+    animation: fadeUp .7s .1s ease both;
+  }
+  .hero h1 span { color: var(--yellow); }
+
+  .hero p {
+    margin-top: 16px;
+    color: var(--gray-2);
+    font-size: 1rem;
+    max-width: 480px;
+    margin-inline: auto;
+    line-height: 1.7;
+    position: relative; z-index: 2;
+    animation: fadeUp .7s .2s ease both;
+  }
+
+  /* ── SECTION LABEL ── */
+  .section-label {
+    display: flex; align-items: center; gap: 12px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: 11px;
+    letter-spacing: 3px; text-transform: uppercase;
+    color: var(--blue);
+    margin-bottom: 36px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1; height: 2px;
+    background: linear-gradient(90deg, var(--blue) 0%, transparent 100%);
+  }
+
+  /* ── PACKAGES SECTION ── */
+  .packages-wrap {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 70px 24px;
+  }
+
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--white);
+    border-radius: 24px;
+    padding: 36px 32px;
+    position: relative;
+    overflow: hidden;
+    border: 2px solid transparent;
+    transition: transform .3s ease, box-shadow .3s ease;
+    animation: fadeUp .7s ease both;
+  }
+  .card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 24px 60px rgba(11,47,255,.14);
+    border-color: var(--blue-light);
+  }
+
+  .card--recommended {
+    background: var(--ink);
+    color: var(--white);
+    border-color: var(--blue);
+    box-shadow: 0 20px 60px rgba(11,47,255,.22);
+  }
+  .card--recommended:hover {
+    border-color: var(--yellow);
+    box-shadow: 0 28px 70px rgba(11,47,255,.32);
+  }
+
+  /* card bg shape */
+  .card__bg-shape {
+    position: absolute;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    top: -60px; right: -60px;
+    pointer-events: none;
+  }
+  .card--basic    .card__bg-shape { background: var(--blue-light); }
+  .card--recommended .card__bg-shape { background: var(--blue); opacity: .3; }
+  .card--premium  .card__bg-shape { background: var(--yellow-soft); }
+
+  .card__bg-tri {
+    position: absolute;
+    width: 0; height: 0;
+    border-left: 30px solid transparent;
+    border-right: 30px solid transparent;
+    bottom: -10px; left: 28px;
+    opacity: .08;
+    pointer-events: none;
+  }
+  .card--basic    .card__bg-tri { border-bottom: 52px solid var(--blue); }
+  .card--recommended .card__bg-tri { border-bottom: 52px solid var(--yellow); }
+  .card--premium  .card__bg-tri { border-bottom: 52px solid var(--yellow); }
+
+  /* rec badge */
+  .rec-tag {
+    position: absolute;
+    top: 28px; right: -30px;
+    background: var(--yellow);
+    color: var(--ink);
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: 10px; letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 5px 40px;
+    transform: rotate(42deg);
+  }
+
+  .card__icon {
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+  }
+  .card--basic     .card__icon { background: var(--blue-light); }
+  .card--recommended .card__icon { background: rgba(255,214,0,.18); }
+  .card--premium   .card__icon { background: var(--yellow-soft); }
+
+  .card__paket {
+    font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--blue);
+    margin-bottom: 6px;
+  }
+  .card--recommended .card__paket { color: var(--yellow); }
+
+  .card__name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: 1.6rem;
+    line-height: 1.1;
+    margin-bottom: 6px;
+  }
+  .card--recommended .card__name { color: var(--white); }
+
+  .card__tagline {
+    font-size: .85rem; color: #6B728E; line-height: 1.6;
+    margin-bottom: 24px;
+  }
+  .card--recommended .card__tagline { color: var(--gray-2); }
+
+  /* price */
+  .card__price-block {
+    background: var(--blue-light);
+    border-radius: 14px;
+    padding: 16px 20px;
+    margin-bottom: 26px;
+    display: flex; align-items: baseline; gap: 6px;
+  }
+  .card--recommended .card__price-block { background: rgba(11,47,255,.3); }
+  .card--premium .card__price-block { background: var(--yellow-soft); }
+
+  .card__price-label {
+    font-size: 11px; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 1px;
+  }
+  .card--recommended .card__price-label { color: var(--yellow); }
+  .card--premium .card__price-label { color: var(--ink); }
+
+  .card__price {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: 1.55rem;
+    color: var(--ink);
+  }
+  .card--recommended .card__price { color: var(--yellow); }
+  .card--premium .card__price { color: var(--ink); }
+
+  /* output pill */
+  .card__output {
+    display: flex; align-items: flex-start; gap: 10px;
+    background: var(--gray);
+    border-radius: 10px;
+    padding: 10px 14px;
+    margin-bottom: 24px;
+    font-size: .8rem; color: #4A5175; line-height: 1.5;
+  }
+  .card--recommended .card__output { background: rgba(255,255,255,.08); color: var(--gray-2); }
+  .card__output .ico { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+  /* list */
+  .card__list { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; }
+  .card__list li {
+    display: flex; align-items: flex-start; gap: 10px;
+    font-size: .875rem; color: #2E3460; line-height: 1.5;
+  }
+  .card--recommended .card__list li { color: #BFC7E8; }
+
+  .check {
+    width: 20px; height: 20px; flex-shrink: 0;
+    border-radius: 6px;
+    background: var(--blue-light);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+  }
+  .card--recommended .check { background: rgba(255,214,0,.2); }
+  .card--premium .check { background: var(--yellow-soft); }
+
+  /* cta */
+  .card__cta {
+    display: block; width: 100%; padding: 14px;
+    border-radius: 12px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: .95rem; letter-spacing: .5px;
+    cursor: pointer; border: none;
+    text-align: center;
+    transition: transform .2s, box-shadow .2s;
+  }
+  .card__cta:hover { transform: translateY(-2px); }
+
+  .card--basic .card__cta {
+    background: var(--blue); color: var(--white);
+    box-shadow: 0 8px 24px rgba(11,47,255,.28);
+  }
+  .card--basic .card__cta:hover { box-shadow: 0 12px 32px rgba(11,47,255,.4); }
+
+  .card--recommended .card__cta {
+    background: var(--yellow); color: var(--ink);
+    box-shadow: 0 8px 24px rgba(255,214,0,.35);
+  }
+  .card--recommended .card__cta:hover { box-shadow: 0 12px 32px rgba(255,214,0,.5); }
+
+  .card--premium .card__cta {
+    background: var(--ink); color: var(--yellow);
+    box-shadow: 0 8px 24px rgba(10,13,26,.2);
+  }
+  .card--premium .card__cta:hover { box-shadow: 0 12px 32px rgba(10,13,26,.3); }
+
+  /* stagger animation */
+  .card:nth-child(1) { animation-delay: .1s; }
+  .card:nth-child(2) { animation-delay: .22s; }
+  .card:nth-child(3) { animation-delay: .34s; }
+
+  /* ── ADD-ONS ── */
+  .addons-wrap {
+    max-width: 1080px;
+    margin: 0 auto 70px;
+    padding: 0 24px;
+  }
+
+  .addons-box {
+    background: var(--ink);
+    border-radius: 28px;
+    padding: 44px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .addons-box::before {
+    content: '';
+    position: absolute;
+    width: 300px; height: 300px;
+    background: var(--blue);
+    border-radius: 50%;
+    top: -120px; right: -80px;
+    opacity: .2;
+    filter: blur(40px);
+  }
+
+  .addons-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: 1.5rem;
+    color: var(--yellow);
+    margin-bottom: 6px;
+    position: relative; z-index: 1;
+  }
+  .addons-sub {
+    color: var(--gray-2); font-size: .875rem;
+    margin-bottom: 32px;
+    position: relative; z-index: 1;
+  }
+
+  .addons-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+    position: relative; z-index: 1;
+  }
+
+  .addon-item {
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 16px;
+    padding: 20px 22px;
+    display: flex; align-items: flex-start; gap: 14px;
+    transition: background .2s, border-color .2s;
+  }
+  .addon-item:hover {
+    background: rgba(255,255,255,.1);
+    border-color: var(--yellow);
+  }
+
+  .addon-icon {
+    width: 44px; height: 44px; flex-shrink: 0;
+    background: rgba(255,214,0,.15);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+  }
+
+  .addon-text h4 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: .95rem;
+    color: var(--white);
+    margin-bottom: 3px;
+  }
+  .addon-text p {
+    font-size: .8rem; color: var(--gray-2); line-height: 1.5;
+    margin-bottom: 8px;
+  }
+  .addon-price {
+    display: inline-block;
+    background: var(--yellow);
+    color: var(--ink);
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: .8rem;
+    padding: 3px 12px; border-radius: 100px;
+  }
+
+  /* ── FOOTER STRIP ── */
+  .footer-strip {
+    background: var(--blue);
+    padding: 32px 24px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .footer-strip::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 12px,
+      rgba(255,255,255,.04) 12px,
+      rgba(255,255,255,.04) 24px
+    );
+  }
+  .footer-strip p {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: 1.05rem;
+    color: var(--white);
+    position: relative; z-index: 1;
+  }
+  .footer-strip span { color: var(--yellow); }
+
+  /* ── DIVIDER SHAPE ── */
+  .wave-divider {
+    display: block;
+    width: 100%; height: 60px;
+    background: var(--ink);
+    clip-path: ellipse(55% 100% at 50% 0%);
+    margin-top: -2px;
+  }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: #F4F5FC; }
+  ::-webkit-scrollbar-thumb { background: var(--blue); border-radius: 4px; }
+
+  @media (max-width: 540px) {
+    .hero { padding: 48px 20px 64px; }
+    .packages-wrap, .addons-wrap { padding-inline: 16px; }
+    .addons-box { padding: 28px 20px; }
+    .cards-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ HERO ══ -->
+<section class="hero">
+  <div class="shape-tri"></div>
+  <div class="shape-sq"></div>
+  <div class="shape-circle"></div>
+  <div class="shape-dot"></div>
+  <div class="shape-cross"></div>
+
+  <div class="badge">
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+      <polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9,11 6,9.5 3,11 3.5,7.5 1,5 4.5,4.5" fill="currentColor"/>
+    </svg>
+    Design Services
+  </div>
+
+  <h1>Pricelist<br><span>Portfolio Design</span></h1>
+  <p>Desain profesional yang custom, bukan template pasaran. Tampil beda, tampil percaya diri.</p>
+</section>
+<div class="wave-divider" style="background:#F4F5FC; clip-path: ellipse(55% 100% at 50% 0%); height:50px; margin-top:0;"></div>
+
+
+<!-- ══ PACKAGES ══ -->
+<section class="packages-wrap">
+  <div class="section-label">Pilih Paket</div>
+
+  <div class="cards-grid">
+
+    <!-- BASIC -->
+    <div class="card card--basic">
+      <div class="card__bg-shape"></div>
+      <div class="card__bg-tri"></div>
+      <div class="card__icon">🎯</div>
+      <div class="card__paket">Paket 01</div>
+      <div class="card__name">Basic<br>Starter</div>
+      <div class="card__tagline">Personal branding yang simpel, tajam, dan to-the-point.</div>
+      <div class="card__price-block">
+        <div>
+          <div class="card__price-label">Mulai dari</div>
+          <div class="card__price">Rp150.000</div>
+        </div>
+      </div>
+      <div class="card__output">
+        <span class="ico">📄</span>
+        <span>PDF High-Res &amp; Link Interactive (Canva / Web / Github)</span>
+      </div>
+      <ul class="card__list">
+        <li><span class="check">✦</span> Maksimal 5 Halaman</li>
+        <li><span class="check">✦</span> Desain Custom — bukan template pasaran</li>
+        <li><span class="check">✦</span> Revisi 1×</li>
+        <li><span class="check">✦</span> Pengerjaan 1–2 hari</li>
+        <li><span class="check">✦</span> Focus: Profile, Skill &amp; 3 Project Highlights</li>
+      </ul>
+      <button class="card__cta">Pilih Paket Basic →</button>
+    </div>
+
+    <!-- BUSINESS (RECOMMENDED) -->
+    <div class="card card--recommended">
+      <div class="card__bg-shape"></div>
+      <div class="card__bg-tri"></div>
+      <div class="rec-tag">Recommended</div>
+      <div class="card__icon">💼</div>
+      <div class="card__paket">Paket 02</div>
+      <div class="card__name">Business</div>
+      <div class="card__tagline">Tampil lebih kredibel, detail, dan profesional di depan klien.</div>
+      <div class="card__price-block">
+        <div>
+          <div class="card__price-label">Mulai dari</div>
+          <div class="card__price">Rp450.000 – 500rb</div>
+        </div>
+      </div>
+      <div class="card__output">
+        <span class="ico">🌐</span>
+        <span>PDF Interactive + Link Web Portofolio + Source File</span>
+      </div>
+      <ul class="card__list">
+        <li><span class="check">✦</span> Maksimal 15–20 Halaman</li>
+        <li><span class="check">✦</span> Desain Eksklusif &amp; Layouting Profesional</li>
+        <li><span class="check">✦</span> Copywriting Assist (rapiin kalimat kamu)</li>
+        <li><span class="check">✦</span> Revisi 3×</li>
+        <li><span class="check">✦</span> Pengerjaan 3–5 hari</li>
+        <li><span class="check">✦</span> Focus: Full Portfolio, Testimoni &amp; Galeri Karya</li>
+      </ul>
+      <button class="card__cta">Pilih Paket Business →</button>
+    </div>
+
+    <!-- PREMIUM -->
+    <div class="card card--premium">
+      <div class="card__bg-shape"></div>
+      <div class="card__bg-tri"></div>
+      <div class="card__icon">🚀</div>
+      <div class="card__paket">Paket 03</div>
+      <div class="card__name">Premium<br>Expert</div>
+      <div class="card__tagline">Untuk Agency &amp; Senior Professional yang butuh "wow factor".</div>
+      <div class="card__price-block">
+        <div>
+          <div class="card__price-label">Mulai dari</div>
+          <div class="card__price">Rp850.000 – 1jt</div>
+        </div>
+      </div>
+      <div class="card__output">
+        <span class="ico">⚡</span>
+        <span>Custom Web Landing Page (Framer/Carrd/Wix) + PDF Version</span>
+      </div>
+      <ul class="card__list">
+        <li><span class="check">✦</span> Halaman Tak Terbatas (up to 40 hal. PDF)</li>
+        <li><span class="check">✦</span> Animasi &amp; Transisi (Web)</li>
+        <li><span class="check">✦</span> Optimasi Mobile — Full Responsif</li>
+        <li><span class="check">✦</span> Prioritas Revisi Sepuasnya (atau 5×)</li>
+        <li><span class="check">✦</span> Pengerjaan 7 hari</li>
+        <li><span class="check">✦</span> Focus: Branding Menyeluruh &amp; High-end Aesthetics</li>
+      </ul>
+      <button class="card__cta">Pilih Paket Premium →</button>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ══ ADD-ONS ══ -->
+<section class="addons-wrap">
+  <div class="addons-box">
+    <div class="addons-title">⚙ Add-ons</div>
+    <div class="addons-sub">Tambahan layanan sesuai kebutuhan kamu</div>
+
+    <div class="addons-grid">
+
+      <div class="addon-item">
+        <div class="addon-icon">⚡</div>
+        <div class="addon-text">
+          <h4>Ekstra Cepat</h4>
+          <p>1 hari selesai, langsung prioritas antrian.</p>
+          <span class="addon-price">+Rp50.000</span>
+        </div>
+      </div>
+
+      <div class="addon-item">
+        <div class="addon-icon">📄</div>
+        <div class="addon-text">
+          <h4>Tambah Halaman</h4>
+          <p>Per halaman tambahan di luar paket yang dipilih.</p>
+          <span class="addon-price">+Rp20.000/hal</span>
+        </div>
+      </div>
+
+      <div class="addon-item">
+        <div class="addon-icon">🔄</div>
+        <div class="addon-text">
+          <h4>Update Portofolio</h4>
+          <p>Retainer maintenance untuk update berkala.</p>
+          <span class="addon-price">Rp50.000</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ FOOTER ══ -->
+<footer class="footer-strip">
+  <p>Siap tampil beda? <span>Hubungi sekarang</span> dan mulai desainmu! ✦</p>
+</footer>
+
+</body>
+</html>
